@@ -17,7 +17,7 @@ headers = [
 
 fcircles_lib = static_library(
     'fcircles_static', sources,
-    dependencies: [fmt_dep, png_dep],
+    dependencies: [npp_dep, png_dep],
     cpp_args: cpp_flags,
     link_args: l_args,
     include_directories: headers,
@@ -27,6 +27,6 @@ fcircles_lib = static_library(
 
 fcircles_dep = declare_dependency(
     link_with : fcircles_lib,
-    dependencies: [fmt_dep, png_dep],
+    dependencies: [npp_dep, png_dep],
     include_directories : headers
 )

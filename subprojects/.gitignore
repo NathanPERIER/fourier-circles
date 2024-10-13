@@ -5,6 +5,5 @@
 # Exception for this file
 !.gitignore
 
-# Exceptions for wrap files
-!/fmt.wrap
-!/catch2.wrap
+# Exceptions for submodules
+!/npp-utils

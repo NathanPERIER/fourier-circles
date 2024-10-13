@@ -1,0 +1,3 @@
+[submodule "subprojects/npp-utils"]
+	path = subprojects/npp-utils
+	url = git@github.com:NathanPERIER/npp-utils.git
