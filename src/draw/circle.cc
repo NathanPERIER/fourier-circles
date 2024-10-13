@@ -5,15 +5,23 @@
 
 namespace {
 
-bool check_curve_goes_down(npp::vec2<npp::N> v, size_t radius) {
-    // Basically, the curve needs to go down if the distance between the current pixel and the centre of the circle is greater than one
-    // i.e. | sqrt(x² + (y+0.5)²) - r | >= 1   (0.5 factor for offset correction)
-    //   => sqrt(x² + (y+0.5)²) - r >= 1       (since the distance to the centre is always >= radius)
-    //  <=> sqrt(x² + (y+0.5)²) >= r + 1
-    //   => x² + (y + 0.5)² >= (r + 1)²        (since r + 1 > 1 and the square function is strictly increasing on [1, +inf[)
-    const double yc = static_cast<double>(v.y) + 0.5;
-    const double r1 = static_cast<double>(radius + 1);
-    return (static_cast<double>(v.x * v.x) + (yc * yc)) >= (r1 * r1);
+/// @param v vector from the centre of the disc to a point
+/// @param radius the external radius of the disc
+/// @return wheter or not the point is in the disc
+bool check_point_out_of_disc(npp::vec2<npp::N> v, size_t radius) {
+    // Assume x >= 0, y >= 0, r >= 1
+    // Basically, check if the distance between the current pixel (x, y) and the centre of the disc (0, 0) is greater than the radius r
+    // i.e. sqrt(x² + (y+0.5)²) >= r     (with offset correction on y, because we are working with pixels)
+    //   => x² + (y + 0.5)² >= r²        (the square function is strictly increasing on [1, +inf[)
+    //  <=> x² + y² + 2 * 0.5 * y + 0.5 * 0.5 >= r²
+    //  <=> x² + y² + y + 0.25 >= r²
+    //   => x² + y(y + 1) >= r²          (because we only want to work with integers)
+    if (radius == 0) [[unlikely]] {
+        return false;
+    }
+    // const double yc = static_cast<double>(v.y) + 0.5;
+    // return (static_cast<double>(v.x * v.x) + (yc * yc)) >= static_cast<double>(radius * radius);
+    return static_cast<uint64_t>(v.x * v.x + v.y * (v.y + 1)) >= (radius * radius);
 }
 
 } // anonymous namespace
@@ -44,7 +52,7 @@ std::vector<npp::vec2<npp::N>> compute_circle_points(size_t radius) {
     while(current.x <= current.y) {
         res.push_back(current);
         current.x += 1;
-        if(::check_curve_goes_down(current, radius)) {
+        if(::check_point_out_of_disc(current, radius + 1)) {
             current.y -= 1;
         }
     }
