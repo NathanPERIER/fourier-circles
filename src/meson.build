@@ -7,6 +7,7 @@ l_args = []
 
 
 sources = [
+    'draw/circle.cc',
     'utils/image/png_image.cc'
 ]
 
