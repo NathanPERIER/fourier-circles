@@ -7,6 +7,7 @@ l_args = []
 
 
 sources = [
+    'utils/image/png_image.cc'
 ]
 
 headers = [
