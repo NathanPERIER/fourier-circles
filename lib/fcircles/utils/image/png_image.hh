@@ -35,7 +35,7 @@ public:
         if(y >= _height) {
             throw std::runtime_error(fmt::format("Cannot get y={} for an image where height={}", y, _height));
         }
-        return _pixels[_height * y + x];
+        return _pixels[_width * y + x];
     }
 
     const rgba& at(size_t x, size_t y) const {
@@ -45,7 +45,7 @@ public:
         if(y >= _height) {
             throw std::runtime_error(fmt::format("Cannot get y={} for an image where height={}", y, _height));
         }
-        return _pixels[_height * y + x];
+        return _pixels[_width * y + x];
     }
 
     std::vector<uint8_t> dump();
