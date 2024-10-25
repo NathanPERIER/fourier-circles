@@ -20,9 +20,13 @@ void write_png_flush_buf(png_struct* png) {
 
 
 
-namespace fcl {
+namespace fcl::detail {
 
-png_image::png_image(size_t width, size_t height, std::optional<rgba> bg_col): _width(width), _height(height) {
+void png_data_holder::init() {
+    if(_info != nullptr || _png != nullptr) {
+        return;
+    }
+
     _png = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
     if(_png == nullptr) {
         throw std::runtime_error("Error while allocating PNG structure");
@@ -33,10 +37,20 @@ png_image::png_image(size_t width, size_t height, std::optional<rgba> bg_col): _
         // TODO check that PNG structure is freed
         throw std::runtime_error("Error while allocating PNG info structure");
     }
+}
+
+} // namespace fcl::detail
+
+
+
+namespace fcl {
+
+png_image::png_image(size_t width, size_t height, std::optional<rgba> bg_col): _width(width), _height(height) {
+    _holder.init();
 
     png_set_IHDR(
-        _png,
-        _info,
+        _holder.png(),
+        _holder.info(),
         _width, _height,
         8,
         PNG_COLOR_TYPE_RGBA,
@@ -45,7 +59,7 @@ png_image::png_image(size_t width, size_t height, std::optional<rgba> bg_col): _
         PNG_FILTER_TYPE_DEFAULT
     );
 
-    const size_t row_bytes = png_get_rowbytes(_png, _info);
+    const size_t row_bytes = png_get_rowbytes(_holder.png(), _holder.info());
     assert(row_bytes == (_width * sizeof(rgba)));
     if(bg_col.has_value()) {
         _pixels.resize(_width * _height, bg_col.value());
@@ -62,11 +76,11 @@ std::vector<uint8_t> png_image::dump() {
     }
 
     std::vector<uint8_t> res;
-    png_set_write_fn(_png, &res, ::write_png_data_buf, ::write_png_flush_buf);
+    png_set_write_fn(_holder.png(), &res, ::write_png_data_buf, ::write_png_flush_buf);
     
-    png_write_info(_png, _info);
-    png_write_image(_png, row_pointers.data()); // Warning: systematic copy here
-    png_write_end(_png, nullptr);
+    png_write_info(_holder.png(), _holder.info());
+    png_write_image(_holder.png(), row_pointers.data()); // Warning: systematic copy here
+    png_write_end(_holder.png(), nullptr);
 
     return res;
 }

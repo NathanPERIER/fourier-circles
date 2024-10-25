@@ -11,6 +11,52 @@
 #include "fcircles/utils/colours/rgba.hh"
 
 
+namespace fcl::detail {
+
+class png_data_holder {
+
+public:
+    png_data_holder() {};
+
+    png_data_holder(png_data_holder&& holder): _png(holder._png), _info(holder._info) {
+        holder._png = nullptr;
+        holder._info = nullptr;
+    };
+
+    png_data_holder& operator=(png_data_holder&& holder) {
+        destroy();
+        _png = holder._png;
+        _info = holder._info;
+        holder._png = nullptr;
+        holder._info = nullptr;
+        return *this;
+    }
+
+    png_data_holder(const png_data_holder&) = delete;
+    png_data_holder& operator=(const png_data_holder&) = delete;
+
+    void init();
+
+    png_struct* png() { return _png; }
+    png_info* info() { return _info; }
+
+    ~png_data_holder() { destroy(); }
+
+private:
+    png_struct* _png  = nullptr;
+    png_info*   _info = nullptr;
+
+    void destroy() {
+        if(_info != nullptr || _png != nullptr) {
+            png_destroy_write_struct(&_png, &_info);
+        }
+    }
+
+};
+
+} // namespace fcl::detail
+
+
 namespace fcl {
 
 class png_image {
@@ -18,9 +64,8 @@ class png_image {
 public:
     png_image(size_t width, size_t height, std::optional<rgba> bg_col = std::nullopt);
 
-    // TODO enable moving
-    png_image(png_image&&) = delete;
-    png_image& operator=(png_image&&) = delete;
+    png_image(png_image&&) = default;
+    png_image& operator=(png_image&&) = default;
 
     png_image(const png_image&) = delete;
     png_image& operator=(const png_image&) = delete;
@@ -50,14 +95,11 @@ public:
 
     std::vector<uint8_t> dump();
 
-    ~png_image() { png_destroy_write_struct(&_png, &_info); }
-
 private:
     size_t _width;
     size_t _height;
 
-    png_struct* _png  = nullptr;
-    png_info*   _info = nullptr;
+    fcl::detail::png_data_holder _holder;
 
     std::vector<rgba> _pixels;
 };
