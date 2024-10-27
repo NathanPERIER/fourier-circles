@@ -11,7 +11,7 @@ cpp_warning_flags = [
 ]
 
 npp_proj = subproject('npp-utils')
-npp_dep = npp_proj.get_variable('npputils_dep')
+npp_dep = npp_proj.get_variable('npputils_core_dep')
 catch2_dep = npp_proj.get_variable('catch2_dep')
 
 png_dep = dependency('libpng')
