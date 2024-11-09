@@ -45,7 +45,7 @@ void png_data_holder::init() {
 
 namespace fcl {
 
-png_image::png_image(size_t width, size_t height, std::optional<rgba> bg_col): _width(width), _height(height) {
+png_image::png_image(size_t width, size_t height, std::optional<npp::rgba> bg_col): _width(width), _height(height) {
     _holder.init();
 
     png_set_IHDR(
@@ -60,7 +60,7 @@ png_image::png_image(size_t width, size_t height, std::optional<rgba> bg_col): _
     );
 
     const size_t row_bytes = png_get_rowbytes(_holder.png(), _holder.info());
-    assert(row_bytes == (_width * sizeof(rgba)));
+    assert(row_bytes == (_width * sizeof(npp::rgba)));
     if(bg_col.has_value()) {
         _pixels.resize(_width * _height, bg_col.value());
     } else {

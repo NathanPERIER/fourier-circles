@@ -8,7 +8,7 @@
 
 #include <png.h>
 
-#include "fcircles/utils/colours/rgba.hh"
+#include <npp/colour/rgba.hh>
 
 
 namespace fcl::detail {
@@ -62,7 +62,7 @@ namespace fcl {
 class png_image {
 
 public:
-    png_image(size_t width, size_t height, std::optional<rgba> bg_col = std::nullopt);
+    png_image(size_t width, size_t height, std::optional<npp::rgba> bg_col = std::nullopt);
 
     png_image(png_image&&) = default;
     png_image& operator=(png_image&&) = default;
@@ -73,7 +73,7 @@ public:
     size_t width()  const { return _width;  }
     size_t height() const { return _height; }
 
-    rgba& at(size_t x, size_t y) {
+    npp::rgba& at(size_t x, size_t y) {
         if(x >= _width) {
             throw std::runtime_error(fmt::format("Cannot get x={} for an image where width={}", x, _width));
         }
@@ -83,7 +83,7 @@ public:
         return _pixels[_width * y + x];
     }
 
-    const rgba& at(size_t x, size_t y) const {
+    const npp::rgba& at(size_t x, size_t y) const {
         if(x >= _width) {
             throw std::runtime_error(fmt::format("Cannot get x={} for an image where width={}", x, _width));
         }
@@ -101,7 +101,7 @@ private:
 
     fcl::detail::png_data_holder _holder;
 
-    std::vector<rgba> _pixels;
+    std::vector<npp::rgba> _pixels;
 };
 
 } // namespace fcl

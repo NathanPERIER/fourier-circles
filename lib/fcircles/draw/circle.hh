@@ -8,6 +8,6 @@
 
 namespace fcl {
 
-std::vector<npp::vec2<npp::N>> compute_circle_points(size_t radius);
+std::vector<npp::vec2<npp::N>> compute_circle_points(std::size_t radius);
 
 } // namespace fcl
