@@ -44,7 +44,7 @@ namespace fcl {
 class canvas {
 
 public:
-    canvas(): _sum(0, 0) {};
+    canvas() {};
 
     void add(double x, double y);
     void add(npp::complex c) { add(c.re(), c.im()); }
@@ -53,7 +53,6 @@ public:
 
 private:
     std::vector<npp::vec2<npp::N>> _points;
-    npp::vec2<npp::R> _sum;
 
     fcl::detail::minmax _x_bounds;
     fcl::detail::minmax _y_bounds;
