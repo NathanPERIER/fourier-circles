@@ -8,8 +8,9 @@ l_args = []
 
 sources = [
     'draw/circle.cc',
-    'utils/image/canvas.cc',
-    'utils/image/png_image.cc'
+    'draw/canvas.cc',
+    'draw/png_image.cc',
+    'math/fourier_transform.cc'
 ]
 
 headers = [

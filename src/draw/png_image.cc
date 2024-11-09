@@ -1,5 +1,5 @@
 
-#include "fcircles/utils/image/png_image.hh"
+#include "fcircles/draw/png_image.hh"
 
 #include <cassert>
 #include <stdexcept>

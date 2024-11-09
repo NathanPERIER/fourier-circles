@@ -1,4 +1,4 @@
-#include "fcircles/utils/image/canvas.hh"
+#include "fcircles/draw/canvas.hh"
 
 
 namespace fcl {

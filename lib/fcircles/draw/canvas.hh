@@ -6,7 +6,7 @@
 
 #include <npp/math/complex.hh>
 
-#include <fcircles/utils/image/png_image.hh>
+#include "fcircles/draw/png_image.hh"
 
 
 namespace fcl::detail {

@@ -1,9 +1,4 @@
-
-#pragma once
-
-#include <vector>
-
-#include <npp/math/complex.hh>
+#include "fcircles/math/fourier_transform.hh"
 
 
 namespace fcl {
