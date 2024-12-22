@@ -10,6 +10,7 @@ sources = [
     'draw/circle.cc',
     'draw/canvas.cc',
     'draw/png_image.cc',
+    'draw/segment.cc',
     'math/fourier_transform.cc'
 ]
 
